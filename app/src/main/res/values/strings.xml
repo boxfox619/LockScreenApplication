@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LockApplication</string>
+    <string name="serviceName">com.boxfox.lockapplication.screenlisten.ScreenService</string>
+</resources>
