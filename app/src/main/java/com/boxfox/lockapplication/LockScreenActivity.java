@@ -44,14 +44,14 @@ public class LockScreenActivity extends AppCompatActivity {
         int right = (int) (Math.random() * (rs.size()-1)) + 0;
         int worng = (int) (Math.random() * (rs.size()-1)) + 0;
         int check = (int) (Math.random() * 2) + 1;
+        if(rs.get(right).getWorngCount() < rs.get(worng).getWorngCount()){
+            int tmp = right;
+            right = worng;
+            worng = tmp;
+        }
         currentWord = right;
         Word rightWord = rs.get(right);
         Word worngWord = rs.get(worng);
-        if(rightWord.getWorngCount() < worngWord.getWorngCount()){
-            Word tmp = rightWord;
-            rightWord = worngWord;
-            worngWord = tmp;
-        }
         textiViewWord.setText(rightWord.getEnglish());
         if(check==1){
             buttonLeft.setText(rightWord.getKorean());
