@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.boxfox.lockapplication.R;
+
 public class ScreenService extends Service {
     private ScreenOffBroadCastReciver mReceiver = null;
 
@@ -41,7 +43,12 @@ public class ScreenService extends Service {
                 }
             }
         }
-        startForeground(1, new Notification());
+        Notification.Builder mBuilder = new Notification.Builder(this);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        mBuilder.setTicker("잠금화면 영단어");
+        mBuilder.setContentTitle("잠금화면 영단어");
+        mBuilder.setContentText("잠금화면 영단어가 실행중 입니다.");
+        startForeground(1, mBuilder.build());
         return START_REDELIVER_INTENT;
     }
 
