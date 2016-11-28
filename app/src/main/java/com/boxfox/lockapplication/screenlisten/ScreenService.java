@@ -1,11 +1,11 @@
 package com.boxfox.lockapplication.screenlisten;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 public class ScreenService extends Service {
     private ScreenOffBroadCastReciver mReceiver = null;
@@ -22,6 +22,7 @@ public class ScreenService extends Service {
         mReceiver = new ScreenOffBroadCastReciver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mReceiver, intentFilter);
     }
 
@@ -35,10 +36,12 @@ public class ScreenService extends Service {
                     mReceiver = new ScreenOffBroadCastReciver();
                     IntentFilter intentFilter = new IntentFilter();
                     intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+                    intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
                     registerReceiver(mReceiver, intentFilter);
                 }
             }
         }
+        startForeground(1, new Notification());
         return START_REDELIVER_INTENT;
     }
 
