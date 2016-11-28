@@ -4,6 +4,7 @@ import io.realm.RealmObject;
 
 public class Word extends RealmObject {
     private String english, korean;
+    private int worngCount = 0;
 
     public String getKorean() {
         return korean;
@@ -19,5 +20,13 @@ public class Word extends RealmObject {
 
     public void setEnglish(String english) {
         this.english = english;
+    }
+
+    public int getWorngCount() {
+        return worngCount;
+    }
+
+    public void setWorngCount(int worngCount) {
+        this.worngCount = worngCount;
     }
 }

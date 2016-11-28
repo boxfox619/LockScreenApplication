@@ -18,6 +18,7 @@ public class LockScreenActivity extends AppCompatActivity {
     private TextView textiViewWord;
     private Button buttonLeft;
     private Button buttonRight;
+    private int currentWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +28,30 @@ public class LockScreenActivity extends AppCompatActivity {
         textiViewWord = ((TextView)findViewById(R.id.word));
         buttonLeft = ((Button)findViewById(R.id.buttonLeft));
         buttonRight = ((Button)findViewById(R.id.buttonRight));
+        init(null);
     }
 
-    private void init(){
+    private void init(Integer worngNum){
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
         Realm.setDefaultConfiguration(realmConfig);
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Word> rs = realm.where(Word.class).findAll();
+        if(worngNum!=null){
+            realm.beginTransaction();
+            rs.get(worngNum).setWorngCount(rs.get(worngNum).getWorngCount()+1);
+            realm.commitTransaction();
+        }
         int right = (int) (Math.random() * (rs.size()-1)) + 0;
         int worng = (int) (Math.random() * (rs.size()-1)) + 0;
         int check = (int) (Math.random() * 2) + 1;
+        currentWord = right;
         Word rightWord = rs.get(right);
         Word worngWord = rs.get(worng);
+        if(rightWord.getWorngCount() < worngWord.getWorngCount()){
+            Word tmp = rightWord;
+            rightWord = worngWord;
+            worngWord = tmp;
+        }
         textiViewWord.setText(rightWord.getEnglish());
         if(check==1){
             buttonLeft.setText(rightWord.getKorean());
@@ -62,7 +75,7 @@ public class LockScreenActivity extends AppCompatActivity {
     private View.OnClickListener worngClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            init();
+            init(currentWord);
         }
     };
 }
