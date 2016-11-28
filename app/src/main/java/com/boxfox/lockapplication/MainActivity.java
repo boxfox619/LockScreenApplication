@@ -10,7 +10,11 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.boxfox.lockapplication.dto.Setting;
+import com.boxfox.lockapplication.dto.Word;
 import com.boxfox.lockapplication.screenlisten.ScreenService;
+
+import java.io.InputStream;
+import java.util.Scanner;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -39,15 +43,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRealm(Context context){
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).build();
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
         Realm.setDefaultConfiguration(realmConfig);
         Realm realm = Realm.getDefaultInstance();
         Setting setting = realm.where(Setting.class).findFirst();
         if(setting==null){
             realm.beginTransaction();
             realm.createObject(Setting.class);
+            InputStream in = getResources().openRawResource(R.raw.words);
+            Scanner s = new Scanner(in);
+            while(s.hasNext()){
+                String line = s.nextLine();
+                Word word = realm.createObject(Word.class);
+                word.setEnglish(line.split("-")[0]);
+                word.setKorean(line.split("-")[1]);
+            }
             realm.commitTransaction();
         }
+        System.out.println(realm.where(Word.class).count());
     }
 
     private void setLock(boolean check){
